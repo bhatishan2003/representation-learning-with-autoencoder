@@ -1,12 +1,6 @@
-# 🧠 Representation Learning with Autoencoder
+# Representation Learning with Autoencoder
 
-## 📌 Project Name
-
-**representation-learning-with-autoencoder**
-
----
-
-## 📖 Project Description
+## Project Description
 
 This project explores representation learning using an Autoencoder and investigates the impact of Orthogonal Regularization on latent space structure.
 
