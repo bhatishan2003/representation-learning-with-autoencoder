@@ -76,6 +76,6 @@ In this case, the latent representations are more overlapping and less structure
 
 ### 🔹 Case 2: WITH Orthogonal Loss
 
-Here, orthogonal regularization encourages decorrelated features, leading to a more structured and organized latent space.
+Here, orthogonal regularization encourages decorrelated features, lwhich leads to a more structured and organized latent space.
 
 ![Latent Space With Orthogonal Loss](assets/latent_with_ortho.png)
