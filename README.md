@@ -70,7 +70,7 @@ The following figures visualize the learned latent vectors (after PCA projection
 
 In this case, the latent representations are more overlapping and less structured.
 
-![Latent Space Without Orthogonal Loss](assets/latent_without_ortho.png)
+![Latent Space Without Orthogonal Loss](assets/latent_without_ortho.png?v=2)
 
 ---
 
@@ -78,4 +78,4 @@ In this case, the latent representations are more overlapping and less structure
 
 Here, orthogonal regularization encourages decorrelated features, lwhich leads to a more structured and organized latent space.
 
-![Latent Space With Orthogonal Loss](assets/latent_with_ortho.png)
+![Latent Space With Orthogonal Loss](assets/latent_with_ortho.png?v=2)
