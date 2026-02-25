@@ -29,7 +29,8 @@ class AutoEncoder(nn.Module):
             nn.ReLU(),
             nn.Linear(256, 64),
             nn.ReLU(),
-            nn.Linear(64, latent_dim)
+            nn.Linear(64, latent_dim),
+            nn.Tanh()
         )
 
         self.decoder = nn.Sequential(
@@ -188,9 +189,6 @@ def get_args():
     return parser.parse_args()
 
 
-# ======================
-# Main
-# ======================
 if __name__ == "__main__":
 
     args = get_args()
@@ -208,5 +206,10 @@ if __name__ == "__main__":
     prefix = "with_ortho" if args.use_ortho else "no_ortho"
     np.save(f"recon_{prefix}.npy", recon_losses)
     np.save(f"ortho_{prefix}.npy", ortho_losses)
+
+    # Extract & save latents
+    print("Extracting latent representations...")
+    latents = extract_latents(model)
+    np.save(f"latents_{prefix}.npy", latents)
 
     print("\nTraining complete. Files saved.")
