@@ -1,6 +1,4 @@
-# Representation Learning with Autoencoder
-
-## Project Description
+# Representation Learning with Autoencoder <!-- omit in toc -->
 
 This project explores representation learning using an Autoencoder and investigates the impact of Orthogonal Regularization on latent space structure.
 
@@ -19,6 +17,13 @@ The goal is to analyze:
 Orthogonal regularization encourages decorrelated latent features, leading to more structured and independent embeddings.
 
 ---
+
+## Table of Contents <!-- omit in toc -->
+
+- [Installation](#installation)
+- [Usage](#usage)
+- [Development Notes](#development-notes)
+- [Experiments](#experiments)
 
 ## ⚙️ Clone and Installation
 
@@ -79,3 +84,24 @@ In this case, the latent representations are more overlapping and less structure
 Here, orthogonal regularization encourages decorrelated features, lwhich leads to a more structured and organized latent space.
 
 ![Latent Space With Orthogonal Loss](assets/latent_with_ortho.png?v=2)
+
+## Development Notes
+
+- Pre-commit
+
+    We use pre-commit to automate linting of our codebase.
+    - Install hooks:
+        ```bash
+        pre-commit install
+        ```
+    - Run Hooks manually (optional):
+        ```bash
+        pre-commit run --all-files
+        ```
+
+- Ruff:
+    - Lint and format:
+        ```bash
+        ruff check --fix
+        ruff format
+        ```

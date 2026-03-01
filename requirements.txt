@@ -4,3 +4,5 @@ matplotlib
 tqdm
 scikit-learn
 numpy
+ruff
+pre-commit
