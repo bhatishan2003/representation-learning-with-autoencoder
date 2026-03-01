@@ -8,12 +8,13 @@ from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 from collections import defaultdict
-import os 
+import os
 
 # ======================
 # Device
 # ======================
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
 
 # =================================
 # Dataset Download and Processing
@@ -32,8 +33,8 @@ class ImageAutoEncoder(nn.Module):
     def __init__(self, input_shape: tuple, latent_dim=16):
         super().__init__()
         self.input_shape = input_shape
-        assert len(tuple) == 2
-        flat_image_size = input_shape[0]*input_shape[1]
+        assert len(input_shape) == 2
+        flat_image_size = input_shape[0] * input_shape[1]
         self.encoder = nn.Sequential(
             nn.Flatten(),
             nn.Linear(flat_image_size, 256),
@@ -41,23 +42,19 @@ class ImageAutoEncoder(nn.Module):
             nn.Linear(256, 64),
             nn.ReLU(),
             nn.Linear(64, latent_dim),
-            nn.Tanh()
+            nn.Tanh(),
         )
 
         self.decoder = nn.Sequential(
-            nn.Linear(latent_dim, 64),
-            nn.ReLU(),
-            nn.Linear(64, 256),
-            nn.ReLU(),
-            nn.Linear(256, flat_image_size),
-            nn.Sigmoid()
+            nn.Linear(latent_dim, 64), nn.ReLU(), nn.Linear(64, 256), nn.ReLU(), nn.Linear(256, flat_image_size), nn.Sigmoid()
         )
 
     def forward(self, x):
         z = self.encoder(x)
         x_hat = self.decoder(z)
-        x_hat = x_hat.view(-1, 1, self.input_shape[0],self.input_shape[1])
+        x_hat = x_hat.view(-1, 1, self.input_shape[0], self.input_shape[1])
         return x_hat, z
+
 
 # ======================
 # Orthogonality Loss
@@ -73,31 +70,25 @@ def orthogonality_loss(z):
 # Training Function
 # ======================
 def main(args):
-
-    # Initiating model
-    model = ImageAutoEncoder(input_shape=image_size, latent_dim = args.latent_dim).to(DEVICE)
-    optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
-
     # Data Loaders
     dataset = _get_mnist_dataset()
     image_size = dataset[0][0].shape
-    loader = DataLoader(
-        dataset,
-        batch_size=args.batch_size,
-        shuffle=True
-    )
+    loader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True)
+
+    # Initiating model
+    model = ImageAutoEncoder(input_shape=image_size, latent_dim=args.latent_dim).to(DEVICE)
+    optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
+
     # Loss trackers
     recon_losses = []
     ortho_losses = []
 
     # Train loop
     for epoch in range(args.epochs):
-
         total_recon = 0
         total_ortho = 0
 
-        for x, _ in tqdm(loader, desc=f"Epoch {epoch+1}/{args.epochs}"):
-
+        for x, _ in tqdm(loader, desc=f"Epoch {epoch + 1}/{args.epochs}"):
             x = x.to(DEVICE)
             optimizer.zero_grad()
             x_hat, z = model(x)
@@ -144,51 +135,19 @@ def extract_latents(model, samples_per_class=100):
 # Argument Parser
 # ======================
 def get_args():
+    parser = argparse.ArgumentParser(description="MNIST AutoEncoder with Optional Orthogonality Loss")
 
-    parser = argparse.ArgumentParser(
-        description="MNIST AutoEncoder with Optional Orthogonality Loss"
-    )
+    parser.add_argument("--use_ortho", action="store_true", help="Enable orthogonality loss")
 
-    parser.add_argument(
-        "--use_ortho",
-        action="store_true",
-        help="Enable orthogonality loss"
-    )
+    parser.add_argument("--epochs", type=int, default=10, help="Number of training epochs")
 
-    parser.add_argument(
-        "--epochs",
-        type=int,
-        default=10,
-        help="Number of training epochs"
-    )
+    parser.add_argument("--latent_dim", type=int, default=16, help="Latent vector dimension")
 
-    parser.add_argument(
-        "--latent_dim",
-        type=int,
-        default=16,
-        help="Latent vector dimension"
-    )
+    parser.add_argument("--batch_size", type=int, default=128, help="Batch size")
 
-    parser.add_argument(
-        "--batch_size",
-        type=int,
-        default=128,
-        help="Batch size"
-    )
+    parser.add_argument("--lr", type=float, default=1e-3, help="Learning rate")
 
-    parser.add_argument(
-        "--lr",
-        type=float,
-        default=1e-3,
-        help="Learning rate"
-    )
-
-    parser.add_argument(
-        "--lambda_ortho",
-        type=float,
-        default=0.01,
-        help="Orthogonality loss weight"
-    )
+    parser.add_argument("--lambda_ortho", type=float, default=0.01, help="Orthogonality loss weight")
 
     parser.add_argument("--experiment_root_dir", type=str, default=os.path.join(os.getcwd(), "results"))
     run_name = "with_ortho" if args.use_ortho else "without_ortho"
@@ -199,7 +158,6 @@ def get_args():
 
 
 if __name__ == "__main__":
-
     args = get_args()
 
     print("\nTraining Configuration:")
@@ -208,14 +166,14 @@ if __name__ == "__main__":
     model, recon_losses, ortho_losses = main(args)
 
     # Save model and losses
-    torch.save(model.state_dict(), os.path.join(args.run_dir,"model.pth"))
+    torch.save(model.state_dict(), os.path.join(args.run_dir, "model.pth"))
     prefix = "with_ortho" if args.use_ortho else "no_ortho"
-    np.save(os.path.join(args.run_dir,"recon.npy"), recon_losses)
-    np.save(os.path.join(args.run_dir,"ortho.npy"), ortho_losses)
+    np.save(os.path.join(args.run_dir, "recon.npy"), recon_losses)
+    np.save(os.path.join(args.run_dir, "ortho.npy"), ortho_losses)
 
     # Extract & save latents
     print("Extracting latent representations...")
     latents = extract_latents(model)
-    np.save(os.path.join(args.run_dir,"latents.npy"), latents)
+    np.save(os.path.join(args.run_dir, "latents.npy"), latents)
 
     print("\nTraining complete. Files saved.")

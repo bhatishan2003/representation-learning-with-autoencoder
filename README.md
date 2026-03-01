@@ -2,7 +2,7 @@
 
 This project explores representation learning using an Autoencoder and investigates the impact of Orthogonal Regularization on latent space structure.
 
-An Autoencoder is trained on image data to learn compressed latent representations.  
+An Autoencoder is trained on image data to learn compressed latent representations.
 We compare two cases:
 
 1. ✅ Standard Autoencoder (Reconstruction Loss only)

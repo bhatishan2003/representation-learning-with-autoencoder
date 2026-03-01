@@ -1,8 +1,8 @@
+matplotlib
+numpy
+pre-commit
+ruff
+scikit-learn
 torch
 torchvision
-matplotlib
 tqdm
-scikit-learn
-numpy
-ruff
-pre-commit
