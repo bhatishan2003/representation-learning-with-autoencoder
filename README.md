@@ -69,21 +69,26 @@ Below is the comparison of training losses for both models.
 
 ## 🌌 7. Latent Space Visualization
 
-The following figures visualize the learned latent vectors (after PCA projection to 2D).
+## 🔬 Latent Space Comparison
 
-### 🔹 Case 1: WITHOUT Orthogonal Loss
+We trained 7 configurations:
 
-In this case, the latent representations are more overlapping and less structured.
+- Without orthogonal loss (latent = 1, 10)
+- With orthogonal loss (latent = 1)
+- With orthogonal loss (latent = 10, λ = 0.01, 0.1, 0.5)
 
-![Latent Space Without Orthogonal Loss](assets/latent_without_ortho.png?v=2)
+### 🔎 Observations
 
----
+- **Latent = 1** → Representations collapse into a line. No meaningful separation.
+- **Without Orthogonal Loss (latent = 10)** → Overlapping clusters, correlated features.
+- **With Orthogonal Loss (latent = 10)** → More structured and separated clusters.
 
-### 🔹 Case 2: WITH Orthogonal Loss
+As λ increases:
+- Better feature decorrelation
+- Clearer geometric structure
+- Slight drop in reconstruction quality
 
-Here, orthogonal regularization encourages decorrelated features, lwhich leads to a more structured and organized latent space.
-
-![Latent Space With Orthogonal Loss](assets/latent_with_ortho.png?v=2)
+![Latent Space Comparison](assets/all_latent_spaces.png)
 
 ## Development Notes
 
