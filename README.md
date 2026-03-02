@@ -18,13 +18,18 @@ Orthogonal regularization encourages decorrelated latent features, leading to mo
 
 ---
 
+
 ## Table of Contents <!-- omit in toc -->
 
-- [Installation](#installation)
-- [Usage](#usage)
+- [ Clone and Installation](#️-clone-and-installation)
+- [ Usage](#-usage)
+  - [ Train WITHOUT Orthogonal Loss](#-train-without-orthogonal-loss)
+  - [ Train WITH Orthogonal Loss](#-train-with-orthogonal-loss)
+- [ Training Graph Comparison](#-training-graph-comparison)
+  - [ Reconstruction Loss & Orthogonal Loss](#-reconstruction-loss--orthogonal-loss)
+- [ Latent Space Visualization](#-latent-space-visualization)
+  - [ Latent Space Comparison](#-latent-space-comparison)
 - [Development Notes](#development-notes)
-- [Experiments](#experiments)
-
 ## ⚙️ Clone and Installation
 
 ### 1️⃣ Clone the Repository
@@ -34,11 +39,11 @@ git clone https://github.com/bhatishan2003/representation-learning-with-autoenco
 cd representation-learning-with-autoencoder
 ```
 
-## 🚀 Usage
+## Usage
 
 The training script supports an optional flag to enable orthogonal regularization.
 
-### 🔹 Train WITHOUT Orthogonal Loss
+### Train WITHOUT Orthogonal Loss
 
 ```bash
 python train.py
@@ -46,7 +51,7 @@ python train.py
 
 - This will train a standard autoencoder using reconstruction loss only.
 
-### 🔹 Train WITH Orthogonal Loss
+###  Train WITH Orthogonal Loss
 
 ```bash
 python train.py --use-orthogonal-loss
@@ -54,11 +59,11 @@ python train.py --use-orthogonal-loss
 
 - This will train the autoencoder with an additional orthogonal regularization term.
 
-## 📊 6. Training Graph Comparison
+## 6. Training Graph Comparison
 
 Below is the comparison of training losses for both models.
 
-### 🔹 Reconstruction Loss & Orthogonal Loss
+###  Reconstruction Loss & Orthogonal Loss
 
 - The left graph shows Reconstruction Loss (with and without orthogonal regularization).
 - The right graph shows Orthogonal Loss (when enabled).
@@ -67,9 +72,9 @@ Below is the comparison of training losses for both models.
 
 ---
 
-## 🌌 7. Latent Space Visualization
+##  7. Latent Space Visualization
 
-## 🔬 Latent Space Comparison
+##  Latent Space Comparison
 
 We trained 7 configurations:
 
@@ -77,7 +82,7 @@ We trained 7 configurations:
 - With orthogonal loss (latent = 1)
 - With orthogonal loss (latent = 10, λ = 0.01, 0.1, 0.5)
 
-### 🔎 Observations
+###  Observations
 
 - **Latent = 1** → Representations collapse into a line. No meaningful separation.
 - **Without Orthogonal Loss (latent = 10)** → Overlapping clusters, correlated features.
