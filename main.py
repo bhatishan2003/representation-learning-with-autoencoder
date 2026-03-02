@@ -72,7 +72,7 @@ def orthogonality_loss(z):
 def main(args):
     # Data Loaders
     dataset = _get_mnist_dataset()
-    image_size = dataset[0][0].shape
+    image_size = dataset[0][0][0].shape
     loader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True)
 
     # Initiating model
@@ -118,17 +118,21 @@ def main(args):
 def extract_latents(model, samples_per_class=100):
     class_latents = defaultdict(list)
     dataset = _get_mnist_dataset()
+
     with torch.no_grad():
         for x, y in dataset:
+            y = int(y)
+
             if len(class_latents[y]) < samples_per_class:
                 x = x.unsqueeze(0).to(DEVICE)
                 _, z = model(x)
-                class_latents[y].append(z.cpu().numpy())
+                z = z.squeeze(0).cpu().numpy()
+                class_latents[y].append(z)
 
             if all(len(v) >= samples_per_class for v in class_latents.values()):
                 break
 
-    return class_latents
+    return dict(class_latents)
 
 
 # ======================
@@ -150,11 +154,15 @@ def get_args():
     parser.add_argument("--lambda_ortho", type=float, default=0.01, help="Orthogonality loss weight")
 
     parser.add_argument("--experiment_root_dir", type=str, default=os.path.join(os.getcwd(), "results"))
+    args = parser.parse_args()
     run_name = "with_ortho" if args.use_ortho else "without_ortho"
+    run_name += "_latent-" + str(args.latent_dim)
+    if args.use_ortho:
+        run_name += "_lambda-" + str(args.lambda_ortho)
     args.run_dir = os.path.join(args.experiment_root_dir, run_name)
     os.makedirs(args.run_dir, exist_ok=True)
 
-    return parser.parse_args()
+    return args
 
 
 if __name__ == "__main__":
